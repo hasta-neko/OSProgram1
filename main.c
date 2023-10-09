@@ -157,24 +157,29 @@ char** analysis_multi(char* input, int* cnt){
     return args;
 }
 
+// single command no pipe
 char** analysis_single(char* command){
     while(command[0] == ' '){
         command++;
     }
+    // strtok(char s[], const char *delim)
+    // 首次调用时s为要分解的字符串，delim为分隔符字符串。
+    // 之后s为NULL
     char* temp2 = strtok(command, " ");
-    int count = 0;
+    int count = 0; // count string number
     char* cmd;
     char** args = (char**)malloc(sizeof(char)*30);
-    memset(args, 0, sizeof(char)*31);
+    memset(args, 0, sizeof(char)*31); // why 31?
     while(temp2){
         char* temp1 = temp2;
         temp2 = strtok(NULL, " ");
         while(temp1[0] == ' '){
             temp1++;
         }
+        // 从这里开始没懂
         if(count == 0){
             if(temp2){
-                cmd = (char*)malloc(sizeof(char)*(temp2-temp1+1));
+                cmd = (char*)malloc(sizeof(char)*(temp2-temp1+1)); // why
             }else{
                 cmd = (char*)malloc(sizeof(char)*(command+1024-temp1));
             }
@@ -190,21 +195,22 @@ char** analysis_single(char* command){
             strcpy(args[count], temp1);
         }
         count ++;
+        // 到这里 ↑ 没懂
         if(count > 30){
             printf("JCshell: too many arguments\n");
             return NULL;
         }
     }
     if(memcmp(cmd, "exit", 4) == 0){
-            if(count > 1){
-                printf("\"exit\" with too many arguments\n");
-                return NULL;
-            }
-            else{
-                printf("JCshell: Terminated\n");
-                exit(0);
-            }
+        if(count > 1){
+            printf("\"exit\" with too many arguments\n");
+            return NULL;
         }
+        else{
+            printf("JCshell: Terminated\n");
+            exit(0);
+        }
+    }
     
     return args;
 }
